@@ -51,6 +51,8 @@ class AuthController extends Controller
                 // Mail::to($email)->send(new WelcomeCompanyMail($details));
                 dispatch(new SendWelcomeCompanyEmail($details));
                 
+                dispatch(new SendWelcomeCompanyEmail($details))->onQueue('notifications');
+                
                 return response()->json([
                     'status' => 'success',
                     'message' => 'Company registered successfully',

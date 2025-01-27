@@ -7,6 +7,8 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\WelcomeCompanyMail;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class SendWelcomeCompanyEmail extends Job implements ShouldQueue
 {
@@ -31,6 +33,22 @@ class SendWelcomeCompanyEmail extends Job implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to($this->details['email'])->send(new WelcomeCompanyMail($this->details));
+        try
+        {
+            Mail::to($this->details['email'])->send(new WelcomeCompanyMail($this->details));
+
+            DB::table('emails_history')->insert([
+                'email'=>$this->details['email'],
+                'title'=>$this->details['title'],
+                'body'=>$this->details['body'],
+                'job_name'=>self::class,
+                'time'=>Carbon::now()
+            ]);
+        }
+        
+        catch(Exception $e)
+        {
+
+        }
     }
 }
