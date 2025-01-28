@@ -48,9 +48,13 @@ class AuthController extends Controller
                     'email' => $email
                 ];
 
+                // For send email directly 
                 // Mail::to($email)->send(new WelcomeCompanyMail($details));
-                dispatch(new SendWelcomeCompanyEmail($details));
+
+                // Store in default queue
+                // dispatch(new SendWelcomeCompanyEmail($details));
                 
+                //  Store in notifications queue
                 dispatch(new SendWelcomeCompanyEmail($details))->onQueue('notifications');
                 
                 return response()->json([
@@ -174,7 +178,7 @@ class AuthController extends Controller
         
         try {
             // Get the access token from the Authorization header
-            $accessToken = auth()->getToken(); 
+            $accessToken = auth()->getToken();$accessToken = auth()->getToken(); 
     
             // Invalidate the access token
             auth()->logout();

@@ -15,7 +15,8 @@ class SendWelcomeCompanyEmail extends Job implements ShouldQueue
     use InteractsWithQueue, Queueable, SerializesModels;
 
     protected $details;
-    
+    public $tries=5;
+
     /**
      * Create a new job instance.
      *
